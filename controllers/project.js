@@ -48,10 +48,23 @@ var controller ={
 
     getProjects:function(request,response){
         Project.find({}).sort('id').exec(function(error,projects){
-            if(error) return response.status(200).send({message:'error al devolver los datoss'});
+            if(error) return response.status(500).send({message:'error al devolver los datoss'});
             if(!projects) return response.status(404).send({message:'no hay proyector para mostrar'});
             return response.status(200).send({projects});
         });
+    },
+
+    updateProject:function(request,response){
+        var projectId = request.params.id;
+        var update = request.body;
+
+        Project.findByIdAndUpdate(projectId,update,{new:true},(error,projectUpadate)=>{
+            if(error) return response.status(500).send({message:'error al actualizar'});
+            if(!projectUpadate) return response.status(404).send({message:'no existe el proyecto para actualizar'});
+
+            return response.status(200).send({project:projectUpadate});
+        });
+
     }
 }
 
