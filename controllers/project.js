@@ -1,4 +1,5 @@
 var Project = require('../models/project');
+var fs = require('fs');
 var controller ={
     home: function(request, response){
         return response.status(200).send({
@@ -86,13 +87,23 @@ var controller ={
             var filePath = request.files.image.path;
             var fileSplit = filePath.split('\\');
             var fileName = fileSplit[1]
+            var extSplit = fileName.split('\.');
+            var fileExt = extSplit[1];
+
+            if (fileExt == 'png' || fileExt == 'jpg'|| fileExt == 'jpeg'|| fileExt == 'gif') {
+                Project.findByIdAndUpdate(projectId,{image:fileName},{new:true},(error,projectUpadate)=>{
+                    if(error) return response.status(500).send({message:'error al actualizar imagen'});
+                    if(!projectUpadate) return response.status(404).send({message:'no existe el proyecto para actualizar'});
+        
+                    return response.status(200).send({files:projectUpadate});
+                })
+            }else{
+                fs.unlink(filePath,function(error){
+                    return response.status(200).send({ message:'la extension no es valida'})
+                });
+            }
             
-            Project.findByIdAndUpdate(projectId,{image:fileName},{new:true},(error,projectUpadate)=>{
-                if(error) return response.status(500).send({message:'error al actualizar imagen'});
-                if(!projectUpadate) return response.status(404).send({message:'no existe el proyecto para actualizar'});
-    
-                return response.status(200).send({files:projectUpadate});
-            })
+            
             
         }
     }
