@@ -6,7 +6,8 @@
      description:String,
      category:String,
      year:Number,
-     lang:[String],
+     langs:String,
+     image:String,
  });
 //lo pone en ninuscula y le agrega la s
  module.exports = mongoose.model('Project',ProjectSchema)
