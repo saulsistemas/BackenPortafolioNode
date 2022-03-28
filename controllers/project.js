@@ -44,6 +44,14 @@ var controller ={
             })
         });
         
+    },
+
+    getProjects:function(request,response){
+        Project.find({}).sort('id').exec(function(error,projects){
+            if(error) return response.status(200).send({message:'error al devolver los datoss'});
+            if(!projects) return response.status(404).send({message:'no hay proyector para mostrar'});
+            return response.status(200).send({projects});
+        });
     }
 }
 
