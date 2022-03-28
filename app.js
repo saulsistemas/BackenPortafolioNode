@@ -17,6 +17,13 @@ app.get('/test',function(request,response){
         'message':'Hola mundo'
     })
 })
+app.post('/post',function(request,response){
+    console.log(request.body.nombre);
+    console.log(request.body.apellido);
+    response.status(200).send({
+        'message':'Hola mundo'
+    })
+})
 
 //EXPORTAR
 module.exports = app;
