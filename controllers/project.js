@@ -27,11 +27,24 @@ var controller ={
 
             return response.status(200).send({project:projectStored})
         });
-        //return response.status(200).send({
-        //    project:project,
-        //    message:'metodo save project',
-        //})
     },
+
+    getProject:function(request,response){
+        var projectId = request.params.id;
+       
+        console.log(projectId);
+        if (projectId == null || projectId =='') return response.status(404).send({message:'id no existe'}); 
+
+        Project.findById(projectId,function(error,project){
+            if (error) return response.status(500).send({message:'error al devolver dato'})
+            if(!project) return response.status(404).send({message:'no se ha podido buscar el dodcumento'})
+
+            return response.status(200).send({
+                project,
+            })
+        });
+        
+    }
 }
 
 module.exports = controller;
