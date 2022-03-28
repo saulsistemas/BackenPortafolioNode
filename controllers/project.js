@@ -65,7 +65,18 @@ var controller ={
             return response.status(200).send({project:projectUpadate});
         });
 
-    }
+    },
+
+    deleteProject:function(request,response){
+        var projectId = request.params.id;
+        Project.findByIdAndRemove(projectId,(error, projectRemoved)=>{
+            if(error) return response.status(500).send({message:'error al devolver los datos'});
+            if(!projectRemoved) return response.status(404).send({message:'no hay proyector para eliminar'});
+            return response.status(200).send({
+                project:projectRemoved,
+            })
+        })
+    },
 }
 
 module.exports = controller;
