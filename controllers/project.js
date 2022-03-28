@@ -77,6 +77,25 @@ var controller ={
             })
         })
     },
+
+    uploadImage:function(request,response){
+        var projectId = request.params.id;
+        var filName = 'Imagen no subida';
+        
+        if (request.files) {
+            var filePath = request.files.image.path;
+            var fileSplit = filePath.split('\\');
+            var fileName = fileSplit[1]
+            
+            Project.findByIdAndUpdate(projectId,{image:fileName},{new:true},(error,projectUpadate)=>{
+                if(error) return response.status(500).send({message:'error al actualizar imagen'});
+                if(!projectUpadate) return response.status(404).send({message:'no existe el proyecto para actualizar'});
+    
+                return response.status(200).send({files:projectUpadate});
+            })
+            
+        }
+    }
 }
 
 module.exports = controller;
